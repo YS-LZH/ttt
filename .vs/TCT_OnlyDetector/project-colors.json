@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "bf53cab3-41b1-40d9-8b25-c7afaeda6633": {
+      "ProjectGuid": "bf53cab3-41b1-40d9-8b25-c7afaeda6633",
+      "DisplayName": "TCT_OnlyDetector",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}
