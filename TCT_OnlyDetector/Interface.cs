@@ -8,6 +8,8 @@ using System.Threading;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using TCT_OnlyDetector.Native;
+
 namespace TCT_OnlyDetector
 {
     public class Interface
@@ -40,6 +42,13 @@ namespace TCT_OnlyDetector
             STD = 2,
             EDS = 4,
             Calibration = 8
+        }
+        public enum ReconType
+        {
+            BA,
+            Digisens,
+            Iner,
+            TCT
         }
         public enum ReturnCode
         {
@@ -88,7 +97,7 @@ namespace TCT_OnlyDetector
             CloseUARTSerialPortFail = 38,
             CloseXRaySerialPortFail = 39,
             CloseBeamLimiterSerialPortFail = 40,
-            
+
             OpenUARTSerialPortFail = 41,
             OpenXRaySerialPortFail = 42,
             OpenBeamLimiterSerialPortFail = 43,
@@ -99,7 +108,7 @@ namespace TCT_OnlyDetector
             BL_HomingError = 48,
             BL_MovePositionError = 49,
             BL_INIError = 50,
-            
+
             FailSendCommand = 51,
             CheckHomingError = 52,
             CreateDirectoryError = 53,
@@ -110,7 +119,7 @@ namespace TCT_OnlyDetector
             CopyDetectorCalibrationFileError = 58,
             FPGA_WrongCheckSum = 59,
             FPGA_WrongDirection = 60,
-            
+
             FPGA_TimeOutReceiveData = 61,
             FPGA_FeedbackError_Prepare_Setting_Before_Acquisition = 62,
             FPGA_FeedbackError_Start_Acquisition = 63,
@@ -145,8 +154,8 @@ namespace TCT_OnlyDetector
             FPGA_XRAY_KVp_Error = 90,
 
             FPGA_XRAY_uA_Error = 91,
-            FPGA_System_Lower_Temperature=92,
-            FPGA_ReturnDataLengthError=93,
+            FPGA_System_Lower_Temperature = 92,
+            FPGA_ReturnDataLengthError = 93,
             Recon_LackingRawFile = 94,
             Recon_LibraryError = 95,
             Recon_USER_CANCEL = 96,
@@ -468,26 +477,28 @@ namespace TCT_OnlyDetector
             string errormessage = "";
             FPD._prograss = 0;
             int waitTime = 0;
-            FPD.XRAYEmitOn = new XRAYStatus(FPGA.Status.Emit_On);
+            //FPD.XRAYEmitOn = new XRAYStatus(FPGA.Status.Emit_On);
             string methodName = MethodInfo.GetCurrentMethod().Name;
-            string LogFormatedString =className + "." + methodName;
-            LogFormatedString = LogFormatedString.PadRight(frm_tACQ.PadLength);
+            string LogFormatedString = className + "." + methodName;
+            LogFormatedString = LogFormatedString.PadRight(Acquisition.PadLength);
 
             //硬體設定
-            if (settings.FPGA)
+            //if (settings.FPGA)
+            if (true)
             {
                 //開啟port
-                Interface.SerialPortPara SerialPortPara = new Interface.SerialPortPara(frm_Acquisition.settings.SyncBoardPortName, 9600, 8, StopBits.One, Parity.None);
+                Interface.SerialPortPara SerialPortPara = new Interface.SerialPortPara("com1", 9600, 8, StopBits.One, Parity.None);
                 if (!UARTPort.IsOpen)
                     Result = Interface.InitialtPort(UARTPort, SerialPortPara, out errormessage);//開啟UART port
+                Result = (int)Interface.ReturnCode.Success;
                 if (!(Result == (int)Interface.ReturnCode.Success))
                 {
-                    LogFile.Log(frm_tACQ.FPGALog,  LogFormatedString + ":" + "Initial SerialPortPara Result:" + errormessage);
+                    LogFile.Log(Acquisition.FPGALog, LogFormatedString + ":" + "Initial SerialPortPara Result:" + errormessage);
                     return Result;
                 }
                 //write firmware version first
-                LogFile.Log(frm_tACQ.FPGALog, LogFormatedString + ":" + "Firmware Version : " + frm_tACQ.FirmwareVersion + "( " + DateTime.Now.ToString() + " )");
-                if (frm_Acquisition.doRaliabilityTest)
+                //LogFile.Log(Acquisition.FPGALog, LogFormatedString + ":" + "Firmware Version : " + frm_tACQ.FirmwareVersion + "( " + DateTime.Now.ToString() + " )");
+                /*if (frm_Acquisition.doRaliabilityTest)
                 {
                     #region Reliability setting
                     for (int i = 0; i < 3; i++)
@@ -533,10 +544,11 @@ namespace TCT_OnlyDetector
                 else
                 {
                     region = 0x02;
-                }
-                frm_Acquisition.PassBackgroundCommunication = true;
+                }*/
+                //frm_Acquisition.PassBackgroundCommunication = true;
                 for (int i = 0; i < 3; i++)
                 {
+                    /*
                     if (frm_Acquisition.bgw_ACQ.CancellationPending == true)
                         return Result = (int)Interface.ReturnCode.User_Cancel_Acquisition_Process;
                     frm_Acquisition.A3FeedBack = false;
@@ -566,7 +578,7 @@ namespace TCT_OnlyDetector
                     {
                         int WaitForA5TimeOut = 15 * 1000;//unit:ms
                         int TimeElasped = 0;
-                        
+
                         while (!frm_Acquisition.ReceivedA5)
                         {
                             if (frm_Acquisition.bgw_ACQ.CancellationPending == true)
@@ -586,18 +598,19 @@ namespace TCT_OnlyDetector
                             Thread.Sleep(7000);
                             continue;
                         }
-                    }
+                    }*/
                 }
-                if (!frm_Acquisition.A3FeedBack)
+                /*if (!frm_Acquisition.A3FeedBack)
                     return Result = (int)Interface.ReturnCode.FPGA_TimeOutReceiveData;
                 if (!frm_Acquisition.ReceivedA5)
-                    return Result = (int)Interface.ReturnCode.FPGA_FeedbackError_Prepare_Setting_Before_Acquisition;
+                    return Result = (int)Interface.ReturnCode.FPGA_FeedbackError_Prepare_Setting_Before_Acquisition;*/
             }
             else
             {
+                /*
                 #region UARTPort
                 //開啟port
-                Interface.SerialPortPara SerialPortPara = new Interface.SerialPortPara(settings.SyncBoardPortName, settings.FPGA);
+                //Interface.SerialPortPara SerialPortPara = new Interface.SerialPortPara(settings.SyncBoardPortName, settings.FPGA);
                 Result = Interface.InitialtPort(UARTPort, SerialPortPara, out errormessage);//開啟UART port
                 if (!(Result == (int)Interface.ReturnCode.Success))
                 {
@@ -645,11 +658,12 @@ namespace TCT_OnlyDetector
             }
                 SRI.Go(XRAYPort, true, mA, KVp, 1, true);
             }*/
+                /*
                 if (Mode != (int)ControlMode.DryRun)//Set kvp and ma while mode!=dryrun
                 {
                     if (!GetSyncBoardError)
                     {
-                        Interface.SerialPortPara XRAYSerialPortPara = new Interface.SerialPortPara(frm_Acquisition.settings.XRAYPortName, 9600, 8, StopBits.One, Parity.Even);
+                        Interface.SerialPortPara XRAYSerialPortPara = new Interface.SerialPortPara("XRAYSerialPortPara", 9600, 8, StopBits.One, Parity.Even);
                         Result = Interface.InitialtPort(XRAYPort, XRAYSerialPortPara, out errormessage);//開啟 port
                         if (!(Result == (int)Interface.ReturnCode.Success))
                         {
@@ -674,8 +688,9 @@ namespace TCT_OnlyDetector
                         LogFile.Log(LogFile.LogFileName, EOF);
                         return Result = (int)Interface.ReturnCode.GetSyncBoardError;
                     }
-                }
+                }*/
                 #endregion
+                /*
                 #region Beam Limiter
                 if (settings.BeamLimiterSwitch)
                 {
@@ -719,17 +734,18 @@ namespace TCT_OnlyDetector
                         }
                     }
                 }
-                #endregion
+                #endregion*/
             }
             //依照模式執行事先檢查動作，並執行FPD流程
             if (Mode != (int)ControlMode.DryRun)//in scout view and contineous mode
             {
                 DirectoryInfo dir;
                 FileInfo[] fileList;
-                
+
                 #region 0.檢查RamDisk是否存在,若否，則跳出;若存在，則刪除舊檔案。
-                dir = new DirectoryInfo(settings.RamDisk);
-                if (!Directory.Exists(frm_tACQ.RawDiretion))
+                dir = new DirectoryInfo(Acquisition.RamDisk);
+                Directory.CreateDirectory(Acquisition.RamDisk);
+                if (!Directory.Exists(Acquisition.RamDisk))
                 {
                     return Result = (int)Interface.ReturnCode.DISK_Error;
                 }
@@ -756,12 +772,12 @@ namespace TCT_OnlyDetector
                 }
                 #endregion
                 #region 1.檢查預設放置RAW檔資料夾是否存在,若否，則建立新目錄;若存在，則刪除舊檔案。
-                dir = new DirectoryInfo(frm_tACQ.RawDiretion);
-                if (!Directory.Exists(frm_tACQ.RawDiretion))//建立新目錄
+                dir = new DirectoryInfo(Acquisition.RawDiretion);
+                if (!Directory.Exists(Acquisition.RawDiretion))//建立新目錄
                 {
                     try
                     {
-                        Directory.CreateDirectory(frm_tACQ.RawDiretion);
+                        Directory.CreateDirectory(Acquisition.RawDiretion);
                         dir.Attributes = FileAttributes.Hidden;
                     }
                     catch (Exception exc)
@@ -772,12 +788,12 @@ namespace TCT_OnlyDetector
                 }
                 else
                 {
-                    if (frm_Acquisition.isCalibration && frm_Acquisition.calibrationMode != frm_Acquisition.CalibrationMode.ScoutView)// && frm_Acquisition.round != 0)
-                    {
+                    //if (frm_Acquisition.isCalibration && frm_Acquisition.calibrationMode != frm_Acquisition.CalibrationMode.ScoutView)// && frm_Acquisition.round != 0)
+                    {/*
                         if (frm_Acquisition.round != 0)
                         {
                         }
-                        else
+                        else*/
                         {//dir = new DirectoryInfo(frm_tACQ.RawDiretion);
                             fileList = dir.GetFiles();//get all files on the folder
                             foreach (FileInfo file in fileList)
@@ -799,7 +815,7 @@ namespace TCT_OnlyDetector
                             }
                         }
                     }
-                    else//if (frm_Acquisition.round == 0)
+                    //else//if (frm_Acquisition.round == 0)
                     {
                         //dir = new DirectoryInfo(frm_tACQ.RawDiretion);
                         fileList = dir.GetFiles();//get all files on the folder
@@ -824,23 +840,23 @@ namespace TCT_OnlyDetector
                 }
                 #endregion
                 #region 2.檢查預設放置Recon檔資料夾是否存在,若否，則建立新目錄;若存在，則刪除舊檔案。
-                if (!Directory.Exists(frm_tACQ.ReconDiretion))
+                if (!Directory.Exists(Acquisition.ReconDiretion))
                 {
                     try
                     {
-                        Directory.CreateDirectory(frm_tACQ.ReconDiretion);
+                        Directory.CreateDirectory(Acquisition.ReconDiretion);
                     }
                     catch (Exception exc)
                     {
-                        LogFile.Log(LogFile.LogFileName, frm_tACQ.ReconDiretion + " CreateDirectory result:" + exc.Message);
+                        LogFile.Log(LogFile.LogFileName, Acquisition.ReconDiretion + " CreateDirectory result:" + exc.Message);
                         return Result = (int)Interface.ReturnCode.CreateDirectoryError;
                     }
                 }
                 else
                 {
-                    if (frm_tACQ.Recon == frm_tACQ.ReconType.Digisens)//settings.Digisens)                        {
+                    if (Acquisition.Recon == Acquisition.ReconType.Digisens)//settings.Digisens)                        {
                     {
-                        dir = new DirectoryInfo(frm_tACQ.ReconDiretion);
+                        dir = new DirectoryInfo(Acquisition.ReconDiretion);
                         fileList = dir.GetFiles();//get all files on the folder
                         foreach (FileInfo file in fileList)
                         {
@@ -893,38 +909,42 @@ namespace TCT_OnlyDetector
                     }
                 }
                 #endregion
+                MessageBox.Show("先前檢查通過");
                 #region 4.檢查Detector連線_暫不執行
-                //FPD.orl.StructSize = Marshal.SizeOf(typeof(SOpenReceptorLink));
-                //FPD.orl.RecDirPath = settings.DetectorPath;
-                //Result = Utility.FPD.vip_open_receptor_link(ref FPD.orl);
-                //if (Result == Utility.FPD.VIP_NO_ERR)
-                //{
-                //    // check ok, now close the link
-                //    Utility.FPD.vip_close_link();
-                //    LogFile.Log(Interface.LogFileName, "Detector ckeck link OK");
-                //}
-                //else
-                //{
-                //    LogFile.Log(Interface.LogFileName, "Detector ckeck link NG: "+Result.ToString());
-                //    errormessage = "Error Initializing Detector board!" +
-                //        "\nThere were some errors initializing acquisition hardware." +
-                //        "\nApplication will now run in 'Demo' mode only.\nIf you do not expect such problems please contact Customer Service!";
-                //    Result = (int)Interface.ReturnCode.ErrorInitializingDetectorBoard;
-                //    return Result;
-                //}
+                FPD.orl.StructSize = Marshal.SizeOf(typeof(SOpenReceptorLink));
+                FPD.orl.RecDirPath = Acquisition.DetectorPath;
+                Result = FPD.vip_open_receptor_link(ref FPD.orl);
+                if (Result == FPD.VIP_NO_ERR)
+                {
+                    // check ok, now close the link
+                    FPD.vip_close_link();
+                    //LogFile.Log(Interface.LogFileName, "Detector ckeck link OK");
+                    MessageBox.Show("Detector ckeck link OK");
+                }
+                else
+                {
+                    //LogFile.Log(Interface.LogFileName, "Detector ckeck link NG: " + Result.ToString());
+                    errormessage = "Error Initializing Detector board!" +
+                        "\nThere were some errors initializing acquisition hardware." +
+                        "\nApplication will now run in 'Demo' mode only.\nIf you do not expect such problems please contact Customer Service!";
+                    MessageBox.Show(errormessage);
+                    Result = (int)Interface.ReturnCode.ErrorInitializingDetectorBoard;
+                    return Result;
+                }
                 #endregion
                 #region 5.執行FPD Process
                 FPD.FPDPara FPDPara;
-                if (SEQNo == (int)Utility.Interface.MotorSequence.Asymmetric_600 && frm_tACQ.Detector == frm_tACQ.DetectorType.PaxScan1313DX)
+                /*if (SEQNo == (int)Interface.MotorSequence.Asymmetric_600 && frm_tACQ.Detector == frm_tACQ.DetectorType.PaxScan1313DX)
                     FPDPara = new Utility.FPD.FPDPara(0, FramNum, 60, true);
-                else
-                    FPDPara = new Utility.FPD.FPDPara(0, FramNum, 30, true);
+                else*/
+                    FPDPara = new FPD.FPDPara(0, FramNum, 30, true);
                 if (!GetSyncBoardError)
                 {
-                    if (settings.UseDetector)
+                    //if (settings.UseDetector)
                     {
+
                         Result = FPD.RunFluoro(FPDPara, UARTPort);
-                    }
+                    }/*
                     else
                     {
                         Result = FPD.RunFluoroWithoutDetector(FPDPara, UARTPort);
@@ -941,7 +961,7 @@ namespace TCT_OnlyDetector
                             }
                         }
                         #endregion
-                    }
+                    }*/
                     if (!(Result == (int)Interface.ReturnCode.Success))
                     {
                         LogFile.Log(LogFile.LogFileName, "RunFluoro Result:" + Result.ToString());
@@ -954,7 +974,7 @@ namespace TCT_OnlyDetector
                     return Result = (int)Interface.ReturnCode.GetSyncBoardError;
                 }
                 #endregion
-            }
+            }/*
             else//dry run mode_Mode == 9
             {
                 if (!GetSyncBoardError)
@@ -971,8 +991,9 @@ namespace TCT_OnlyDetector
                     LogFile.Log(LogFile.LogFileName, "GetSyncBoardError before DryRun");
                     return Result = (int)Interface.ReturnCode.GetSyncBoardError;
                 }
-            }
+            }*/
 
+            /*
             //收尾:斷線或掛載BG whatcher
             if (!settings.FPGA)
             {
@@ -985,10 +1006,11 @@ namespace TCT_OnlyDetector
                     SRI.Go(XRAYPort, false, mA, KVp, 1, true);
                     Result = Interface.ClosePort(XRAYPort, out errormessage);
                 }
-            }
+            }*/
 
             return Result;
         }
+        /*
         /// <summary>This is used to get FAULT command from sync board</summary>
         public static void EmergencyWhatcher(object sender, SerialDataReceivedEventArgs e)
         {
@@ -1007,6 +1029,6 @@ namespace TCT_OnlyDetector
             // Display the text to the user in the terminal
             Utility.LogFile.Log(frm_tACQ.LogFolder + "mainLog.txt", data);
         }
-        #endregion
+        #endregion*/
     }
 }

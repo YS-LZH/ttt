@@ -31,6 +31,8 @@
             this.btn_Acquisition = new System.Windows.Forms.Button();
             this.ptb_Preview = new System.Windows.Forms.PictureBox();
             this.pgb_ProgressBar = new System.Windows.Forms.ProgressBar();
+            this.lbl_Message = new System.Windows.Forms.Label();
+            this.cbx_Resolution = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.ptb_Preview)).BeginInit();
             this.SuspendLayout();
             // 
@@ -60,11 +62,32 @@
             this.pgb_ProgressBar.Size = new System.Drawing.Size(313, 35);
             this.pgb_ProgressBar.TabIndex = 2;
             // 
+            // lbl_Message
+            // 
+            this.lbl_Message.AutoSize = true;
+            this.lbl_Message.Location = new System.Drawing.Point(173, 336);
+            this.lbl_Message.Name = "lbl_Message";
+            this.lbl_Message.Size = new System.Drawing.Size(0, 12);
+            this.lbl_Message.TabIndex = 3;
+            // 
+            // cbx_Resolution
+            // 
+            this.cbx_Resolution.FormattingEnabled = true;
+            this.cbx_Resolution.Items.AddRange(new object[] {
+            "0.2",
+            "0.25"});
+            this.cbx_Resolution.Location = new System.Drawing.Point(393, 217);
+            this.cbx_Resolution.Name = "cbx_Resolution";
+            this.cbx_Resolution.Size = new System.Drawing.Size(121, 20);
+            this.cbx_Resolution.TabIndex = 4;
+            // 
             // Acquisition
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.cbx_Resolution);
+            this.Controls.Add(this.lbl_Message);
             this.Controls.Add(this.pgb_ProgressBar);
             this.Controls.Add(this.ptb_Preview);
             this.Controls.Add(this.btn_Acquisition);
@@ -72,6 +95,7 @@
             this.Text = "Acquisition";
             ((System.ComponentModel.ISupportInitialize)(this.ptb_Preview)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -80,6 +104,8 @@
         private System.Windows.Forms.Button btn_Acquisition;
         private System.Windows.Forms.PictureBox ptb_Preview;
         private System.Windows.Forms.ProgressBar pgb_ProgressBar;
+        private System.Windows.Forms.Label lbl_Message;
+        private System.Windows.Forms.ComboBox cbx_Resolution;
     }
 }
 

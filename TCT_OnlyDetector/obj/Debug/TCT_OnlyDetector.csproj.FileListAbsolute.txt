@@ -1,0 +1,10 @@
+D:\TCT\TCT_onlydetector\TCT_OnlyDetector\TCT_OnlyDetector\obj\Debug\TCT_OnlyDetector.csproj.SuggestedBindingRedirects.cache
+D:\TCT\TCT_onlydetector\TCT_OnlyDetector\TCT_OnlyDetector\obj\Debug\TCT_OnlyDetector.Acquisition.resources
+D:\TCT\TCT_onlydetector\TCT_OnlyDetector\TCT_OnlyDetector\obj\Debug\TCT_OnlyDetector.Properties.Resources.resources
+D:\TCT\TCT_onlydetector\TCT_OnlyDetector\TCT_OnlyDetector\obj\Debug\TCT_OnlyDetector.csproj.GenerateResource.cache
+D:\TCT\TCT_onlydetector\TCT_OnlyDetector\TCT_OnlyDetector\obj\Debug\TCT_OnlyDetector.csproj.CoreCompileInputs.cache
+D:\TCT\TCT_onlydetector\TCT_OnlyDetector\TCT_OnlyDetector\bin\Debug\TCT_OnlyDetector.exe.config
+D:\TCT\TCT_onlydetector\TCT_OnlyDetector\TCT_OnlyDetector\bin\Debug\TCT_OnlyDetector.exe
+D:\TCT\TCT_onlydetector\TCT_OnlyDetector\TCT_OnlyDetector\bin\Debug\TCT_OnlyDetector.pdb
+D:\TCT\TCT_onlydetector\TCT_OnlyDetector\TCT_OnlyDetector\obj\Debug\TCT_OnlyDetector.exe
+D:\TCT\TCT_onlydetector\TCT_OnlyDetector\TCT_OnlyDetector\obj\Debug\TCT_OnlyDetector.pdb

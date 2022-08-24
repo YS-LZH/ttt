@@ -16,7 +16,7 @@ namespace TCT_OnlyDetector
     class LogFile
     {
         public static string LogFileName = @"c:\TCT\TCTLog\" + "AcqLog_" + DateTime.Today.ToString("yyyyMMdd") + ".log";//File to be write log on
-        //public static string LogFileName1 = frm_tACQ.LogFolder + "BGWLog_" + DateTime.Today.ToString("yyyyMMdd") + ".log";//Used to be validation
+        public static string LogFileName1 = @"c:\TCT\TCTLog\" + "BGWLog_" + DateTime.Today.ToString("yyyyMMdd") + ".log";//Used to be validation
         /// <summary>Write log file with stringlist</summary>
         /// <param name="Path">File to be write on</param>
         /// <param name="StringList">StringList to be write</param>
